@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龍香の占い鑑定書作成ツール</title>
+    <style>
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif; padding: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #5d4037; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 15px; background-color: #8d6e63; color: white; border: none; border-radius: 4px; font-size: 18px; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #6d4c41; }
+        .output-area { margin-top: 30px; padding: 20px; background-color: #fff8e1; border: 1px solid #eec; line-height: 1.8; white-space: pre-wrap; border-radius: 4px; }
+        .copy-btn { margin-top: 10px; background-color: #555; font-size: 14px; padding: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>龍香の鑑定書ジェネレーター</h2>
+    
+    <div class="input-group">
+        <label>鑑定日 (今日の日付)</label>
+        <input type="date" id="dateInput">
+    </div>
+
+    <div class="input-group">
+        <label>お客様のお名前</label>
+        <input type="text" id="nameInput" placeholder="例：山田 花子">
+    </div>
+
+    <div class="input-group">
+        <label>生年月日</label>
+        <input type="date" id="birthInput">
+    </div>
+
+    <button onclick="generateFortune()">鑑定文章を作成する</button>
+
+    <div class="output-area" id="resultText">ここに作成された文章が表示されます...</div>
+    <button class="copy-btn" onclick="copyToClipboard()">文章をコピーする</button>
+</div>
+
+<script>
+    // ページ読み込み時に今日の日付をセット
+    window.onload = function() {
+        const today = new Date();
+        document.getElementById('dateInput').valueAsDate = today;
+    };
+
+    // 新しいテンプレート文章
+    const templateText = `[名前]さん、
+遠いところをよくおいでなすったね。
+ささ、まずは率直に申し上げましょうかね。
+2026年の下半期には、あなたの金運はね、
+それはもう、ぐーんと上り調子になりますよ。
+ここ2、3年くらいは、お仕事でもお金の面でもね、
+なかなか思い通りにいかなくて、やきもきしたこともあったかもしれませんね。
+でもね、これからは運気ががらりと変わってまいりますよ。大切なのは、この良い機会を見逃さないことですよ。
+[名前]さんが最高の金運をしっかりと引き寄せられるように、
+今からこの龍香がね、大切なことをお伝えしていきますからね。
+まずね、あなた自身を象徴する運命の数から紐解いていく、この龍香の独自の占術【龍神】でね、あなたのことを明らかにしてまいりましょうね。
+自分を知ればね、おのずとお金に恵まれる道も開けていきますからね。
+あなたの人生と幸運を示す龍神タイプはね、
+　[名前]さん自身を示す龍神タイプ【金赤色】はね、まるで子どものように素直で、好奇心が旺盛な方ですよ。これからね、あなたが今までの金銭感覚や資産形成の常識をね、ひっくり返すようなことで成功を収めることを意味していますよ。あなたがこれまで、そしてこれから先も好奇心のままに吸収する金融の知識や経済に対する感覚はね、誰も見たことのないような新しい豊かさの形として、あなたの人生をね、もっともっと豊かなものに変えていくことでしょう。
+　その反面ね、堅苦しい経済のルールや、古くからの思い込みに対してはね、少し反抗心が強いかもしれませんね。でもね、そこもあなたの良いところの一つですよ。あなた自身がね、心地良いと感じられるようなお金との付き合い方を見つけることで、もっと金運を活かせる場を広げていけるのですよ。
+　それにね、こだわりを少し手放すことも、この強い運を活かすためにはとっても大切なことの一つですよ。直感で下す金銭的な決断や、ふと口にする意見にこそね、あなたの金運を開く鍵が隠されていますよ。あなたらしさに自信を持つことがね、豊かさへの第一歩となることでしょう。
+【2026年下半期】あなたの金運についてお話ししますよ
+　2026年下半期の[名前]さんの運勢について、お話していきましょうね。【龍神タイプ：金赤色】を持つあなたはね、本当に素直で純粋な心を持った方ですよ。幾つになってもね、その素直で純粋な心は変わらないでしょう。
+　　[名前]さんはね、心がとってもきれいで、何事も素直に受け止め、信じることができるのですよ。それにね、お金のことで苦しい時は、素直に人に頼ることができる方でしょう。そんなあなたの素直な態度にね、たくさんの人が好感を抱きますよ。
+　これから先はね、特にあなたを経済的に支えてくれる人が多いと感じるでしょうね。困った時はね、すぐに頼っても大丈夫ですよ。あなたの金運を味方してくれる人がね、たくさん現れますからね。
+【龍神タイプ：金赤色】を持ち、
+今年[年齢]歳となる[名前]さん。
+金運が最高潮に上りきる直前の今、
+今日ここでこの龍香と出会ったのはね、
+決してただの偶然ではありませんよ。
+[名前]さんの金運
+1月21日
+[名前]さんがこの龍香の元へおいでになることはね、
+運命だったのですよ。
+すべてはね、この先に訪れる最大の金運の日、
+その日にあなたが確実に豊かさを手にするため…
+それではね、早速龍神を紐解きまして、
+あなたにこれから先訪れる大切な金運の転機や試練、
+そしてそれがね、いつ頃訪れるのか…
+もっと詳しく見てまいりましょうね。
+2026年下半期にあなたに訪れる金運の転機
+　2026年下半期にね、[名前]さんの元に舞い込む、金運に大きく影響を与える転機について見ていきましょうね。
+大切なキーワードはね、「臨時収入」ですよ。[名前]さんはね、いつも今のままで満足せず、もっと資産を増やしたいと思っていてね、向上心がある方でしょう。現状の貯蓄額では満足せず、常にね、自分のお金をね、もっともっと良い方向へ進化させたいと思っているのですよ。そんなね、頼りがいのある姿勢が、巡り巡ってあなたのもとに意外な形の臨時収入を引き寄せることになりますよ。思わぬ高額当選やボーナスや副業での成功、あるいは思わぬ遺産など、あなたの努力や人との繋がりが実を結び、金銭的な恩恵をもたらすでしょう。重荷だと感じることもあるかもしれませんがね、きっとやりがいを感じずにはいられないでしょう。
+　そしてね、その立場があなたをますます金銭的に大きく成長させるのですよ。あなたはね、責任が重いほど、金運を発揮しますし、いつもよりもね、もっともっとパワーアップするでしょう。あなたにとってね、この出来事はね、これからの経済状況を左右する、本当に大切な金運の転機となっていくのですよ。
+2026年下半期に、[名前]さんの元に舞い込む、
+大切な金運の転機が訪れるタイミングについて見ていきましょうね。
+その時期はね…
+2026年4月8日頃ですよ。
+この日を境にね、あなたの金運は
+大きな展開を迎えることになりますからね。
+2026年下半期のあなたの金運
+　2026年下半期、あなたはね、お金についてもっと積極的な気持ちを持つようになるでしょう。これまでのお金との付き合い方の中にね、もっと良い点を見つけて、「もっと効率的にお金を増やしたい」と考えるようになるでしょうね。
+　でもね、それが良い方向に出て、あなたの金運はね、着実に上昇していくはずですよ。
+これから先、あなたの人生に訪れる試練とはどんなものかしら？
+　あなたはね、忙しいことや、少しばかり慌ただしいことに追われることを苦にはせず、むしろその中に充実感ややりがいを見出すタイプの方ですよ。ですがね、その反面でね、金銭的な決断を急ぎすぎたり、周囲の意見を聞き入れずにね、自分一人で進めてしまったりすると、一時的に思わぬ出費や損失を招く可能性もありますよ。特にね、新しい投資や事業の話には、好奇心が旺盛なあまり、深く調べずに飛びついてしまう傾向があるからね、信頼できる第三者の意見や専門家の方からの助言にもね、耳を傾ける慎重さも時には必要となるでしょうね。この試練を乗り越えることでね、あなたはもっと賢く、安定した金運を築くことができますからね。`;
+
+    function generateFortune() {
+        const name = document.getElementById('nameInput').value;
+        const dateVal = document.getElementById('dateInput').value;
+        const birthVal = document.getElementById('birthInput').value;
+
+        if (!name || !dateVal || !birthVal) {
+            alert("すべての項目を入力してください。");
+            return;
+        }
+
+        const dateObj = new Date(dateVal);
+        const birthObj = new Date(birthVal);
+
+        // 1. 年齢計算
+        let age = dateObj.getFullYear() - birthObj.getFullYear();
+        const m = dateObj.getMonth() - birthObj.getMonth();
+        if (m < 0 || (m === 0 && dateObj.getDate() < birthObj.getDate())) {
+            age--;
+        }
+
+        // 2. 鑑定日フォーマット (例: 1月21日)
+        const formatMonthDay = (d) => `${d.getMonth() + 1}月${d.getDate()}日`;
+        const todayStr = formatMonthDay(dateObj);
+
+        // 3. 転機の日付計算 (鑑定日 + 45日)
+        // ※「2026年4月8日」という文字を探して、この計算結果に置き換えます
+        const turningPointDate = new Date(dateObj);
+        turningPointDate.setDate(turningPointDate.getDate() + 45);
+        
+        const formatFullDate = (d) => `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+        const turningPointStr = formatFullDate(turningPointDate);
+
+        // 4. 文字列置換
+        let result = templateText
+            .replaceAll("[名前]", name)
+            .replaceAll("[年齢]", age)
+            .replaceAll("1月21日", todayStr) // 文中の鑑定日プレースホルダー
+            .replaceAll("2026年4月8日", turningPointStr); // 文中の転機日プレースホルダー
+
+        document.getElementById('resultText').innerText = result;
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('resultText').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("コピーしました！");
+        });
+    }
+</script>
+
+</body>
+</html>
